@@ -7,7 +7,7 @@ for(let i = 0; i < numberArray.length; i++){
   for(let j = 0; j < numberArray.length; j++){
     if(numberArray[i] + numberArray[j] === 2020) {
       // two solutions are found, i * j, and j * i where they both equal 2020
-      console.log(`Found: ${numberArray[i]} + ${numberArray[j]} = ${numberArray[i] + numberArray[j]}`)
+      console.log(`Found: ${numberArray[i]} + ${numberArray[j]} = ${numberArray[i] * numberArray[j]}`)
     }
   }
 }

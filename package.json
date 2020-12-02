@@ -1,0 +1,20 @@
+{
+  "name": "2020_adventofcode",
+  "version": "1.0.0",
+  "description": "Attempts to solve puzzles on https://adventofcode.com/2020/ with JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tharnach/2020_AdventOfCode.git"
+  },
+  "author": "Tyler Harnach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tharnach/2020_AdventOfCode/issues"
+  },
+  "homepage": "https://github.com/tharnach/2020_AdventOfCode#readme",
+  "type": "module"
+}

@@ -22,17 +22,38 @@ How many passwords are valid according to their policies?
 
 import fs from 'fs'
 
+// PART 1
+// const stringArray = fs.readFileSync('./data.txt').toString().split("\r\n") // windows line endings
+// const totalCorrectPasswords = stringArray.reduce((accumulator, currentValue) => {
+//   const [range, letterWithColon, password] = currentValue.split(' ') // splits line into ['1-3', 'a:', 'abcde'] then destructures
+//   const passwordAsArray = password.split('') // password split into array containing letters
+//   const letter = letterWithColon.replace(':', '') // pulls colon off of given letter contraint
+//   const [low, high] = range.split('-') // breaks '1-3' into ['1', '3'], then destructures
+//   const letterCount = passwordAsArray.reduce((acc, curr) => curr === letter ? acc + 1 : acc, 0) // counts occurrences of given letter contraint in password
+//   // if the count of this letter falls within the given range, count this as a valid password
+//   if(letterCount >= low && letterCount <= high) {
+//     return accumulator + 1
+//   }
+//   return accumulator
+// }, 0)
+// console.log(`Total correct passwords: ${totalCorrectPasswords}`)
+
+// PART 2
 const stringArray = fs.readFileSync('./data.txt').toString().split("\r\n") // windows line endings
 const totalCorrectPasswords = stringArray.reduce((accumulator, currentValue) => {
-  const [range, letterWithColon, password] = currentValue.split(' ') // splits line into ['1-3', 'a:', 'abcde'] then destructures
+  const [range, letterWithColon, password, result] = currentValue.split(' ') // splits line into ['1-3', 'a:', 'abcde'] then destructures
   const passwordAsArray = password.split('') // password split into array containing letters
   const letter = letterWithColon.replace(':', '') // pulls colon off of given letter contraint
-  const [low, high] = range.split('-') // breaks '1-3' into ['1', '3'], then destructures
-  const letterCount = passwordAsArray.reduce((acc, curr) => curr === letter ? acc + 1 : acc, 0) // counts occurrences of given letter contraint in password
-  // if the count of this letter falls within the given range, count this as a valid password
-  if(letterCount >= low && letterCount <= high) {
-    return accumulator + 1
+  const [pos1, pos2] = range.split('-') // breaks '1-3' into ['1', '3'], then destructures
+  const position1 = Number(pos1) - 1 // subtract 1 to get array position
+  const position2 = Number(pos2) - 1 // subtract 1 to get array position
+  // are both positions within the range of the password?
+  if ((position1 < passwordAsArray.length - 1) && (position2 <= passwordAsArray.length - 1)){
+    // is only one of the two positions the given letter?
+    if((passwordAsArray[position1] === letter && passwordAsArray[position2] !== letter) || (passwordAsArray[position1] !== letter && passwordAsArray[position2] === letter)){
+      return accumulator + 1
+    }
   }
   return accumulator
 }, 0)
-console.log(`Total correct passwords: ${totalCorrectPasswords}`)
+console.log(`Total correct passwords: ${totalCorrectPasswords}`) // 502

@@ -16,5 +16,8 @@
     "url": "https://github.com/tharnach/2020_AdventOfCode/issues"
   },
   "homepage": "https://github.com/tharnach/2020_AdventOfCode#readme",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "chalk": "^4.1.0"
+  }
 }

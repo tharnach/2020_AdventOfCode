@@ -5,6 +5,7 @@ const stringArray = fs.readFileSync('./data.txt').toString().split("\r\n"); // w
 
 let arrayOfGroupAnswers = []
 let singleGroupAnswerString = ''
+let groupCount = 0
 for (let i = 0; i < stringArray.length; i++) {
   if (stringArray[i] !== '') {
     if (singleGroupAnswerString.length === 0) {
@@ -14,47 +15,56 @@ for (let i = 0; i < stringArray.length; i++) {
       // append to existing answer value string
       singleGroupAnswerString = singleGroupAnswerString + ' ' + stringArray[i]
     }
+    groupCount++
 
     // if this is the very last item of data, make sure this last object gets added.
     if ( i === stringArray.length - 1) {
       // Let's convert the string we've gathered up to this point,
       // and break it down into objects that we can push into arrayOfGroupAnswers
-      const str = singleGroupAnswerString.replace(/\s/g, '')
+
+      let str = singleGroupAnswerString.replace(/\s/g, '')
+      str  = str + groupCount
       arrayOfGroupAnswers.push(str.split('').sort())
     }
   } else {
     // we've hit a blank line. Let's convert the string we've gathered up to this point,
     // and break it down into objects that we can push into arrayOfGroupAnswers
-    const str = singleGroupAnswerString.replace(/\s/g, '')
-      arrayOfGroupAnswers.push(str.split('').sort())
+    let str = singleGroupAnswerString.replace(/\s/g, '')
+    str  = str + groupCount
+    arrayOfGroupAnswers.push(str.split('').sort())
 
     // reset the answer string when we hit a blank line
     singleGroupAnswerString = ''
+    groupCount = 0
   }
 }
 
-const deduped = arrayOfGroupAnswers.map(answerArray => {
-  return answerArray.reduce((acc, curr) => {
-    if (acc.includes(curr)) {
-      return acc
-    } else {
-      return [...acc, curr]
+const arrayOfGroupAnswersCount = arrayOfGroupAnswers.map(answerArray => {
+
+  return answerArray.reduce((acc, curr, index) => {
+    if(index === 0) {
+      return { numberInGroup: Number(curr) }
     }
-  }, '')
+    if (Object.keys(acc).includes(curr)) {
+      return { ...acc, [curr]: acc[curr] + 1}
+    } else {
+      return {...acc, [curr]: 1}
+    }
+  }, {})
 })
 
-const count = deduped.reduce((accumulator, current) => {
-  let currentAsArray = []
-  if(current.length === 1) {
-    currentAsArray = [current]
-  } else {
-    currentAsArray = current
-  }
+const arrayOfGroupAnswersAllCount = arrayOfGroupAnswersCount.map((answerCount) => {
+  const answerKeys = Object.keys(answerCount)
+  const [ numberInGroup = { num }, ...rest ] = answerKeys
+  return rest.reduce((acc, curr) => {
+    if (answerCount[curr] === answerCount[numberInGroup]) {
+      return [...acc, curr]
+    } else {
+      return acc
+    }
+  }, [])
+})
 
-  const sumOfCurrent = currentAsArray.reduce((acc, curr) => {
-    return acc + curr.length
-  }, 0)
-  return accumulator + sumOfCurrent
-}, 0)
+const countPart2 = arrayOfGroupAnswersAllCount.reduce((accumulator, current) => accumulator + current.length, 0)
 
-console.log(`Count: ${chalk.magenta(count)}`) // 7343 is too high
+console.log(`Count: ${chalk.cyan(countPart2)}`) //3628 
